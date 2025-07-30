@@ -48,7 +48,7 @@ export default function Hero() {
                     </div>
                     <div className="flex mb-4 justify-end">
                       <div className="bg-blue-500 text-white rounded-lg p-3 max-w-xs">
-                        <p className="text-sm">I'd like to know about your pricing</p>
+                        <p className="text-sm">I&apos;d like to know about your pricing</p>
                       </div>
                     </div>
                     <div className="flex mb-4">

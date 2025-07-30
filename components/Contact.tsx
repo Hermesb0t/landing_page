@@ -5,7 +5,7 @@ export default function Contact() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Contact Us</h2>
-            <p className="text-gray-600 text-lg">Have questions? We'd love to hear from you.</p>
+            <p className="text-gray-600 text-lg">Have questions? We&apos;d love to hear from you.</p>
           </div>
           <form
             action="https://formspree.io/f/your-form-id" // replace with your form service URL
