@@ -15,10 +15,12 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
-                <img
-                    src="/images/logo.png"
+                <Image
+                    src="/images/logo.png"  // Public folder path
                     alt="HermesBot Logo"
-                className="h-30 w-auto"
+                    width={120}             // Adjust width as needed
+                    height={40}             // Adjust height as needed
+                    className="h-30 w-auto" // Tailwind styling
                 />
             </div>
           </div>
