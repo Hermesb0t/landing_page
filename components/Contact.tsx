@@ -8,7 +8,7 @@ export default function Contact() {
             <p className="text-gray-600 text-lg">Have questions? We&apos;d love to hear from you.</p>
           </div>
           <form
-            action="https://formspree.io/f/your-form-id" // replace with your form service URL
+            action="https://formspree.io/f/mldllndn" 
             method="POST"
             className="space-y-6"
           >
