@@ -15,6 +15,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center">
+              <a href="/" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 <Image
                     src="/images/logo.png"  // Public folder path
                     alt="HermesBot Logo"
@@ -22,6 +23,7 @@ export default function Navbar() {
                     height={40}             // Adjust height as needed
                     className="h-30 w-auto" // Tailwind styling
                 />
+              </a>
             </div>
           </div>
           <div className="hidden md:flex items-center space-x-8">

@@ -1,7 +1,7 @@
 // components/Hero.tsx
 export default function Hero() {
     return (
-      <section className="hero-gradient text-white">
+      <section id="hero" className="hero-gradient text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
           <div className="md:flex items-center">
             <div className="md:w-1/2 mb-10 md:mb-0">
