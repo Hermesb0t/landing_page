@@ -1,5 +1,5 @@
 // components/Footer.tsx
-import { FaFacebookMessenger, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import Image from 'next/image';
 ;
 
@@ -55,4 +55,3 @@ export default function Footer() {
       </footer>
     )
 }
-  

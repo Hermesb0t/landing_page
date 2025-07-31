@@ -13,7 +13,7 @@ export default function PrivacyPolicyPage() {
         </p>
   
         <p className="mb-4">
-          Trinityx LLC ("we", "our", or "us") operates the Hermesbot chatbot ("Hermesbot") integrated with Facebook Messenger. This Privacy Policy explains how we collect, use, and protect your information when you interact with Hermesbot.
+          Trinityx LLC operates the Hermesbot chatbot integrated with Facebook Messenger. This Privacy Policy explains how we collect, use, and protect your information when you interact with Hermesbot.
         </p>
   
         <h2 className="text-xl font-semibold mt-8 mb-2">1. Information We Collect</h2>
