@@ -40,7 +40,8 @@ export default function Footer() {
           <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">© 2025 Trinityx. All rights reserved.</p>
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+            {/*
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <FaFacebookF />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -49,6 +50,8 @@ export default function Footer() {
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <FaInstagram />
               </a>
+            */
+            }  
             </div>
           </div>
         </div>

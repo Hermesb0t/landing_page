@@ -28,7 +28,7 @@ export default function Contact() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900">Call Us</h4>
-                        <p className="text-gray-600">+976 88080854</p>
+                        <p className="text-gray-600">+976 90802277</p>
                       </div>
                     </div>
 
@@ -38,7 +38,7 @@ export default function Contact() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900">Visit Us</h4>
-                        <p className="text-gray-600">Ulaanbaatar, Mongolia</p>
+                        <p className="text-gray-600">6th khoroolol 34-126,5th khoroo,Chingeltei district,Ulaanbaatar, Mongolia</p>
                       </div>
                     </div>
                   </div>

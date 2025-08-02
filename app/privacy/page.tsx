@@ -51,8 +51,8 @@ export default function PrivacyPolicyPage() {
         <ul className="list-inside list-disc space-y-1">
           <li>Company: Trinityx LLC</li>
           <li>Email: info@hermesbot.me</li>
-          <li>Phone: +976-88080854</li>
-          <li>Location: Ulaanbaatar, Mongolia</li>
+          <li>Phone: +976-90802277</li>
+          <li>Location: 6th khoroolol 34-126,5th khoroo,Chingeltei district,Ulaanbaatar, Mongolia</li>
         </ul>
   
         <p className="mt-8 text-sm text-gray-500">Last updated: July 30, 2025</p>

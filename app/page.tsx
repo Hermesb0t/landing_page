@@ -15,7 +15,6 @@ export default function Home() {
       <Pricing />
       {/* CTA Section inside Hero or separate - I put it inside Hero for now */}
       <Contact />
-      <Footer />
     </>
   )
 }
