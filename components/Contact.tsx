@@ -59,7 +59,7 @@ export default function Contact() {
                         id="name"
                         name="name"
                         required
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
                       />
                     </div>
                     <div>
@@ -71,11 +71,11 @@ export default function Contact() {
                         id="email"
                         name="_replyto"
                         required
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
                       />
                     </div>
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-100">
                         Message
                       </label>
                       <textarea
@@ -83,7 +83,7 @@ export default function Contact() {
                         name="message"
                         rows={4}
                         required
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100"
                       ></textarea>
                     </div>
                     <button

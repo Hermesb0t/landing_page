@@ -38,9 +38,9 @@ export default function HowItWorks() {
               }].map(({ num, title, desc }) => (
                 <div key={num} className="mb-10">
                   <div className="flex items-start mb-4">
-                    <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">{num}</div>
+                    <div className="bg-blue-500 text-white  rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">{num}</div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-1">{title}</h3>
+                      <h3 className="text-xl font-semibold dark:text-gray-900 mb-1">{title}</h3>
                       <p className="text-gray-600">{desc}</p>
                     </div>
                   </div>

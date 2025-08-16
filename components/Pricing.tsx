@@ -12,9 +12,9 @@ export default function Pricing() {
   
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white rounded-xl shadow-md p-8 border border-gray-200 flex flex-col">
-              <h3 className="text-2xl font-semibold mb-4">Basic</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Basic</h3>
               <p className="text-gray-600 mb-6">Ideal for small businesses just getting started.</p>
-              <div className="text-4xl font-bold mb-6">$29<span className="text-lg font-normal">/month</span></div>
+              <div className="text-4xl font-bold text-gray-900 mb-6">$29<span className="text-lg font-normal text-gray-900">/month</span></div>
               <ul className="mb-8 space-y-3 text-gray-600 flex-1">
                 <li>Up to 1,000 messages/month</li>
                 <li>Basic AI responses</li>
@@ -26,9 +26,9 @@ export default function Pricing() {
             </div>
   
             <div className="bg-white rounded-xl shadow-md p-8 border border-gray-200 flex flex-col">
-              <h3 className="text-2xl font-semibold mb-4">Pro</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Pro</h3>
               <p className="text-gray-600 mb-6">For growing businesses that need more features.</p>
-              <div className="text-4xl font-bold mb-6">$99<span className="text-lg font-normal">/month</span></div>
+              <div className="text-4xl font-bold text-gray-900 mb-6">$99<span className="text-lg font-normal">/month</span></div>
               <ul className="mb-8 space-y-3 text-gray-600 flex-1">
                 <li>Up to 10,000 messages/month</li>
                 <li>Advanced AI & analytics</li>
@@ -40,9 +40,9 @@ export default function Pricing() {
             </div>
   
             <div className="bg-white rounded-xl shadow-md p-8 border border-gray-200 flex flex-col">
-              <h3 className="text-2xl font-semibold mb-4">Enterprise</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Enterprise</h3>
               <p className="text-gray-600 mb-6">Custom solutions for large businesses and agencies.</p>
-              <div className="text-4xl font-bold mb-6">Contact Us</div>
+              <div className="text-4xl font-bold text-gray-900 mb-6">Contact Us</div>
               <ul className="mb-8 space-y-3 text-gray-600 flex-1">
                 <li>Unlimited messages</li>
                 <li>Dedicated account manager</li>
