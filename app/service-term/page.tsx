@@ -13,7 +13,7 @@ export default function TermsOfServicePage() {
       <section className="bg-[#121821] border border-white/10 rounded-2xl p-6 mb-6">
         <h2 className="text-xl font-semibold mb-2">1. Introduction</h2>
         <p>
-          These Terms of Service ("Terms") govern your use of our Facebook Messenger chatbot and related services (the "Service"). By using the Service, you agree to these Terms.
+          These Terms of Service (&ldquo;Terms&ldquo;) govern your use of our Facebook Messenger chatbot and related services (the &ldquo;Service&ldquo;). By using the Service, you agree to these Terms.
         </p>
       </section>
 
@@ -47,7 +47,7 @@ export default function TermsOfServicePage() {
       <section className="bg-[#121821] border border-white/10 rounded-2xl p-6 mb-6">
         <h2 className="text-xl font-semibold mb-2">5. Limitation of Liability</h2>
         <p>
-          We provide the Service "as is" without warranties of any kind. To the maximum extent permitted by law, we are not liable for any damages resulting from your use of the Service.
+          We provide the Service &ldquo;as is&ldquo; without warranties of any kind. To the maximum extent permitted by law, we are not liable for any damages resulting from your use of the Service.
         </p>
       </section>
 

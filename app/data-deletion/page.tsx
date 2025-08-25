@@ -12,7 +12,7 @@ export default function DataDeletionPage() {
 
       <section className="bg-[#121821] border border-white/10 rounded-2xl p-6 mb-6">
         <p>
-          If you want to delete information collected through our Facebook Messenger chatbot ("Platform Data"), you can submit a request and we will permanently delete your data.
+          If you want to delete information collected through our Facebook Messenger chatbot (&ldquo;Platform Data&ldquo;), you can submit a request and we will permanently delete your data.
         </p>
 
         <div className="grid gap-4 mt-4">
