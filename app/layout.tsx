@@ -1,5 +1,6 @@
 // app/layout.tsx
 import './globals.css'
+import Providers from "@/components/Providers";
 import { ReactNode } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="font-sans antialiased text-gray-800">
         <Navbar />
-        {children}
+        <Providers>{children}</Providers>
         <Footer />
         {/* Footer will be inside page or separate component */}
       </body>

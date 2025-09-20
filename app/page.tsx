@@ -4,6 +4,7 @@ import Features from '../components/Features';
 import HowItWorks from '../components/HowItWorks';
 import Pricing from '../components/Pricing';
 import Contact from '../components/Contact';
+import FacebookLogin from '@/components/FacebookLogin';
 
 export default function Home() {
   return (
