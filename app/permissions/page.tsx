@@ -12,7 +12,11 @@ export default function PermissionsPage() {
       </p>
 
       <button
-        onClick={() => signIn("facebook")}
+        onClick={() => signIn("facebook", {
+            callbackUrl: "/",
+            // 👇 forces FB to always show permissions screen
+            authorizationParams: { prompt: "consent" },
+          })}
         className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow"
       >
         Continue With Facebook
