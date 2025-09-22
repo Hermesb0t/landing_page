@@ -3,7 +3,6 @@ import './globals.css'
 import { ReactNode } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Providers from '@/components/Providers'
 
 export const metadata = {
   title: 'ChatGenius - AI-Powered Facebook Chatbots',
@@ -18,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="font-sans antialiased text-gray-800">
         <Navbar />
-        <Providers>{children}</Providers>
+        {children}
         <Footer />
         {/* Footer will be inside page or separate component */}
       </body>

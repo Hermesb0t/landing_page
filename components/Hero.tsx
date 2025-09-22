@@ -13,7 +13,7 @@ export default function Hero() {
               </p>
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <a
-                  href="/channels"
+                  href="/contact"
                   className="bg-white text-blue-600 hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg text-center transition-all"
                 >
                   Get Started
