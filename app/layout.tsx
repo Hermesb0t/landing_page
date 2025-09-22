@@ -1,9 +1,9 @@
 // app/layout.tsx
 import './globals.css'
-import Providers from "@/components/Providers";
 import { ReactNode } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import Providers from '@/components/Providers'
 
 export const metadata = {
   title: 'ChatGenius - AI-Powered Facebook Chatbots',
@@ -21,10 +21,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
+        <meta name="facebook-domain-verification" content="rcqtwgmce5jm5mm7683tpu3xjyvt9p" />
       </head>
       <body className="font-sans antialiased text-gray-800">
         <Navbar />
-        <Providers>{children}</Providers>
+        {/*<Providers>{children}</Providers>*/}
+        {children}
         <Footer />
         {/* Footer will be inside page or separate component */}
       </body>
