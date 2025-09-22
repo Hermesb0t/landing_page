@@ -20,7 +20,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Navbar />
         <Providers>{children}</Providers>
         <Footer />
-        {/* Footer will be inside page or separate component */}
       </body>
     </html>
   )
