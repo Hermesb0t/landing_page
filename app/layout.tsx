@@ -19,7 +19,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Navbar />
         {children}
         <Footer />
-        {/* Footer will be inside page or separate component */}
       </body>
     </html>
   )
