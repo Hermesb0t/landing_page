@@ -16,7 +16,7 @@ export default function Pricing() {
               <p className="text-gray-600 mb-6">Ideal for small businesses just getting started.</p>
               <div className="text-4xl font-bold text-gray-900 mb-6">$29<span className="text-lg font-normal text-gray-900">/month</span></div>
               <ul className="mb-8 space-y-3 text-gray-600 flex-1">
-                <li>Up to 1,000 messages/month</li>
+                <li>Up to 1000 messages/month</li>
                 <li>Basic AI responses</li>
                 <li>Email support</li>
               </ul>
