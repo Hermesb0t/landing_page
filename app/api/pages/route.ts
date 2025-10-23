@@ -1,8 +1,8 @@
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: Request) {
-  const token = await getToken({ req: req as any });
+export async function GET(req: NextRequest) {
+  const token = await getToken({ req });
 
   if (!token?.accessToken) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
