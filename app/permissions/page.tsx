@@ -1,9 +1,10 @@
 "use client";
 import { useSession, signIn, signOut } from "next-auth/react";
+import type { Session } from "next-auth";
 import { useState, useEffect } from "react";
 
 export default function PermissionsPage() {
-  const { data: session } = useSession();
+  const { data: session } = useSession() as { data: Session | null };
   const [pages, setPages] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [connectedPage, setConnectedPage] = useState<string | null>(null);

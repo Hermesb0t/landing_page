@@ -4,8 +4,13 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
 export default function DashboardPage() {
+  interface FacebookPage {
+      id: string;
+      name: string;
+      access_token?: string;
+    }
   const { data: session } = useSession();
-  const [pages, setPages] = useState<any[]>([]);
+  const [pages, setPages] = useState<FacebookPage[]>([]);
   const [loading, setLoading] = useState(false);
   const [connectingPageId, setConnectingPageId] = useState<string | null>(null);
   const [connectedPageId, setConnectedPageId] = useState<string | null>(null);
