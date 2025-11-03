@@ -11,13 +11,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const res = await fetch(
-      `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps`,
+      `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps?access_token=${pageAccessToken}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           subscribed_fields: ["messages", "messaging_postbacks", "messaging_optins", "messaging_handovers"],
-          access_token: pageAccessToken,
         }),
       }
     );
@@ -33,4 +32,6 @@ export async function POST(req: NextRequest) {
     console.error("Error subscribing page:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
+}
+
 }
