@@ -18,7 +18,22 @@ export async function POST(req: NextRequest) {
 
   // TODO: call Facebook Graph API to subscribe the chatbot
   // Example (once you have the Page access token):
-  await fetch(`https://graph.facebook.com/${pageId}/subscribed_apps?access_token=${token.accessToken}`, { method: "POST" })
+  const subscribed_apps = await fetch(
+      `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscribed_fields: [
+            "messages",
+            "messaging_postbacks",
+            "messaging_optins",
+            "messaging_handovers",
+          ],
+          access_token: token.accessToken,
+        }),
+      }
+    );
 
   return NextResponse.json({ success: true });
 }
