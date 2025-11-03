@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing pageId or pageAccessToken" }, { status: 400 });
   }
 
+
   try {
     const res = await fetch(
       `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps?access_token=${pageAccessToken}`,
@@ -32,6 +33,5 @@ export async function POST(req: NextRequest) {
     console.error("Error subscribing page:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-}
 
 }
