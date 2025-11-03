@@ -35,12 +35,17 @@ export default function DashboardPage() {
   }, [session]);
 
   const handleConnect = async (pageId: string) => {
+    const page = pages.find((p) => p.id === pageId);
+    if (!page?.access_token) {
+        setMessage("Page token not found");
+        return;
+    }
     setConnectingPageId(pageId);
     try {
       const res = await fetch("/api/connect-page", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pageId }),
+        body: JSON.stringify({ pageId, pageAccessToken: page.access_token }),
       });
       const data = await res.json();
       if (data.success) {
