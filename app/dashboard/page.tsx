@@ -48,6 +48,24 @@ export default function DashboardPage() {
         body: JSON.stringify({ pageId, pageAccessToken: page.access_token }),
       });
       const data = await res.json();
+
+      if(!data.success) throw new Error("Failed to connect chatbot");
+
+      const backendRes = await fetch(`${process.env.BACKEND_URL}/pages`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
+        },
+        body: JSON.stringify({
+            pageId: page.id,
+            name: page.name,
+            accessToken: page.access_token,
+            userToken: session?.accessToken
+        }),
+      });
+      const backendData = await backendRes.json();
+      console.log(backendData)
       if (data.success) {
         setConnectedPageId(pageId);
         setMessage("Page connected successfully 🎉");
