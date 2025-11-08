@@ -4,7 +4,7 @@ import { getToken } from "next-auth/jwt";
 export async function POST(req: NextRequest) {
   const token = await getToken({ req });
   const body = await req.json();
-  const { pageId, pageAccessToken } = body;
+  const { pageId, pageAccessToken, name } = body;
 
   if (!pageId || !pageAccessToken) {
     return NextResponse.json({ error: "Missing pageId or pageAccessToken" }, { status: 400 });
@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: data.error }, { status: 400 });
     }
 
-
     const backendRes = await fetch(`${process.env.BACKEND_URL}/pages`, {
       method: "POST",
       headers: {
@@ -39,7 +38,7 @@ export async function POST(req: NextRequest) {
           pageId: pageId,
           name: name,
           accessToken: pageAccessToken,
-          userToken: token
+          userToken: token?.accessToken
       }),
     });
     const backendData = await backendRes.json();
@@ -49,6 +48,4 @@ export async function POST(req: NextRequest) {
     console.error("Error subscribing page:", err);
     return NextResponse.json({ error: err }, { status: 500 });
   }
-
-
 }
