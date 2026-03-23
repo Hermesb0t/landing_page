@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const shortLivedUserToken = token?.accessToken as string;
+    console.log("Short-lived user token:", shortLivedUserToken);
 
     const exchangeRes = await fetch(
       `https://graph.facebook.com/v20.0/oauth/access_token?` +
