@@ -15,6 +15,9 @@ export async function POST(req: NextRequest) {
     const shortLivedUserToken = token?.accessToken as string;
     console.log("Short-lived user token:", shortLivedUserToken);
 
+    console.log("FB_APP_ID:", process.env.FB_APP_ID);
+    console.log("FB_APP_SECRET exists:", !!process.env.FB_APP_SECRET);
+
     const exchangeRes = await fetch(
       `https://graph.facebook.com/v20.0/oauth/access_token?` +
         new URLSearchParams({
