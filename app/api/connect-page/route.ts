@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
       `https://graph.facebook.com/v20.0/oauth/access_token?` +
         new URLSearchParams({
           grant_type: "fb_exchange_token",
-          client_id: process.env.FB_APP_ID!,
-          client_secret: process.env.FB_APP_SECRET!,
+          client_id: process.env.FB_CLIENT_ID!,
+          client_secret: process.env.FB_CLIENT_SECRET!,
           fb_exchange_token: shortLivedUserToken,
         }),
       { method: "GET" }
