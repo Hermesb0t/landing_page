@@ -12,6 +12,29 @@ export async function POST(req: NextRequest) {
 
 
   try {
+    const shortLivedUserToken = token?.accessToken as string;
+
+    const exchangeRes = await fetch(
+      `https://graph.facebook.com/v20.0/oauth/access_token?` +
+        new URLSearchParams({
+          grant_type: "fb_exchange_token",
+          client_id: process.env.FB_CLIENT_ID!,
+          client_secret: process.env.FB_CLIENT_SECRET!,
+          fb_exchange_token: shortLivedUserToken,
+        }),
+      { method: "GET" }
+    );
+
+    const exchangeData = await exchangeRes.json();
+    console.log("Token exchange response:", exchangeData);
+    if (exchangeData.error) {
+      console.error("Token exchange error:", exchangeData.error);
+      return NextResponse.json(
+        { error: "Failed to exchange user token", detail: exchangeData.error },
+        { status: 400 }
+      );
+    }
+
     const res = await fetch(
       `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps?access_token=${pageAccessToken}`,
       {
