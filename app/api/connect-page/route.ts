@@ -12,70 +12,20 @@ export async function POST(req: NextRequest) {
 
 
   try {
-    const shortLivedUserToken = token?.accessToken as string;
-
-    const exchangeRes = await fetch(
-      `https://graph.facebook.com/v20.0/oauth/access_token?` +
-        new URLSearchParams({
-          grant_type: "fb_exchange_token",
-          client_id: process.env.FB_CLIENT_ID!,
-          client_secret: process.env.FB_CLIENT_SECRET!,
-          fb_exchange_token: shortLivedUserToken,
-        }),
-      { method: "GET" }
-    );
-
-    const exchangeData = await exchangeRes.json();
-
-    if (exchangeData.error) {
-      console.error("Token exchange error:", exchangeData.error);
-      return NextResponse.json(
-        { error: "Failed to exchange user token", detail: exchangeData.error },
-        { status: 400 }
-      );
-    }
-
-    const longLivedUserToken: string = exchangeData.access_token;
-
-    const pageTokenRes = await fetch(
-      `https://graph.facebook.com/v20.0/${pageId}?` +
-        new URLSearchParams({
-          fields: "access_token",
-          access_token: longLivedUserToken,
-        })
-    );
-    const pageTokenData = await pageTokenRes.json();
-
-    if (pageTokenData.error) {
-      console.error("Page token fetch error:", pageTokenData.error);
-      return NextResponse.json(
-        { error: "Failed to get page access token", detail: pageTokenData.error },
-        { status: 400 }
-      );
-    }
-
-    const nonExpiringPageToken: string = pageTokenData.access_token;
-
-    const subRes = await fetch(
-      `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps?access_token=${nonExpiringPageToken}`,
+    const res = await fetch(
+      `https://graph.facebook.com/v20.0/${pageId}/subscribed_apps?access_token=${pageAccessToken}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subscribed_fields: [
-            "messages",
-            "messaging_postbacks",
-            "messaging_optins",
-            "messaging_handovers",
-          ],
+          subscribed_fields: ["messages", "messaging_postbacks", "messaging_optins", "messaging_handovers"],
         }),
       }
     );
-    const subData = await subRes.json();
-
-    if (subData.error) {
-      console.error("Facebook subscription error:", subData.error);
-      return NextResponse.json({ error: subData.error }, { status: 400 });
+    const data = await res.json();
+    if (data.error) {
+      console.error("Facebook API error:", data.error);
+      return NextResponse.json({ error: data.error }, { status: 400 });
     }
 
     const backendRes = await fetch(`${process.env.BACKEND_URL}/pages`, {
@@ -87,23 +37,13 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
           pageId: pageId,
           name: name,
-          accessToken: nonExpiringPageToken,
-          userToken: longLivedUserToken,
+          accessToken: pageAccessToken,
+          userToken: token?.accessToken
       }),
     });
-
-    if (!backendRes.ok) {
-      const errData = await backendRes.json();
-      console.error("Backend error:", errData);
-      return NextResponse.json(
-        { error: "Failed to save page", detail: errData },
-        { status: backendRes.status }
-      );
-    }
-
     const backendData = await backendRes.json();
     console.log(backendData)
-    return NextResponse.json({ success: true, res: backendData, subscribed: subData.success });
+    return NextResponse.json({ success: true, res: backendData });
   } catch (err) {
     console.error("Error subscribing page:", err);
     return NextResponse.json({ error: err }, { status: 500 });
