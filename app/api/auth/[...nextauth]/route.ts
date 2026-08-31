@@ -16,7 +16,9 @@ const authHandler = NextAuth({
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope: "email,public_profile,pages_show_list,pages_read_engagement,pages_manage_metadata,pages_messaging",
+          // business_management is what surfaces Pages owned by a Business Manager
+          // (/me/businesses → owned_pages / client_pages) on top of /me/accounts.
+          scope: "email,public_profile,business_management,pages_show_list,pages_read_engagement,pages_manage_metadata,pages_messaging",
         },
       },
     }),

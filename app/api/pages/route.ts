@@ -1,5 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse, NextRequest } from "next/server";
+import { discoverPages } from "@/lib/facebook";
 
 export async function GET(req: NextRequest) {
   const token = await getToken({ req });
@@ -9,17 +10,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const res = await fetch(
-      `https://graph.facebook.com/v20.0/me/accounts?access_token=${token.accessToken}`
-    );
-    const data = await res.json();
+    const result = await discoverPages(token.accessToken as string);
 
-    if (data.error) {
-      console.error("Facebook API error:", data.error);
-      return NextResponse.json({ error: data.error }, { status: 400 });
+    // Only a hard failure when nothing at all came back.
+    if (!result.pages.length && result.warnings.length) {
+      return NextResponse.json(result, { status: 400 });
     }
 
-    return NextResponse.json({ pages: data.data });
+    return NextResponse.json(result);
   } catch (err) {
     console.error("Error fetching pages:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

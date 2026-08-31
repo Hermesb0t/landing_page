@@ -1,14 +1,23 @@
 import Link from "next/link";
 import { FaFacebookMessenger, FaTwitter, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
-export default function ChannelsPage() {
+export default async function ChannelsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ org?: string }>;
+}) {
+  // The onboarding link carries the client's workspace slug; keep it on the URL
+  // so the wizard knows which organization the Pages belong to.
+  const { org } = await searchParams;
+  const orgQuery = org ? `?org=${encodeURIComponent(org)}` : "";
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
       <h2 className="text-3xl font-bold mb-8 text-gray-800">Choose Your Channel</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
         {/* Messenger */}
-        <Link href="/permissions" className="group">
+        <Link href={`/permissions${orgQuery}`} className="group">
           <div className="p-6 bg-white rounded-2xl shadow hover:shadow-lg transition text-center cursor-pointer border hover:border-indigo-500">
             <div className="flex justify-center mb-4">
               <FaFacebookMessenger size={48} className="opacity-60"/>
