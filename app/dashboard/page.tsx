@@ -160,7 +160,7 @@ function OnboardingWizard() {
     setSelectedPageIds(allSelected ? [] : connectablePages.map((p) => p.id));
 
   const handleConnect = async () => {
-    if (!selectedPageIds.length || !org) return;
+    if (!selectedPageIds.length) return;
 
     setConnecting(true);
     setError(null);
@@ -171,7 +171,8 @@ function OnboardingWizard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           pages: selected.map((p) => ({ id: p.id, name: p.name })),
-          orgSlug: org.slug,
+          // Omitted when skipped — the Page is stored unattached for an admin to link.
+          ...(org ? { orgSlug: org.slug } : {}),
         }),
       });
       const data = await res.json();
@@ -251,8 +252,9 @@ function OnboardingWizard() {
         <section className="bg-white rounded-2xl shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900">Which organization is this for?</h2>
           <p className="text-sm text-gray-500 mt-1 mb-5">
-            Enter the workspace name from your Hermes dashboard URL. Every Page you connect will
-            be linked to it.
+            Enter your organization&apos;s name, or the workspace name from your Hermes dashboard
+            URL. Pages you connect are linked to it. Optional — skip it and we will link them for
+            you.
           </p>
 
           <div className="flex gap-2">
@@ -291,13 +293,25 @@ function OnboardingWizard() {
             </div>
           )}
 
-          <button
-            onClick={() => setStep(2)}
-            disabled={!org}
-            className="mt-6 w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300"
-          >
-            Continue
-          </button>
+          <div className="flex items-center gap-3 mt-6">
+            <button
+              onClick={() => setStep(2)}
+              disabled={!org}
+              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300"
+            >
+              Continue
+            </button>
+            <button
+              onClick={() => {
+                setOrg(null);
+                setOrgError(null);
+                setStep(2);
+              }}
+              className="px-4 py-2 text-sm text-gray-500 underline"
+            >
+              Skip for now
+            </button>
+          </div>
         </section>
       )}
 
@@ -306,8 +320,14 @@ function OnboardingWizard() {
         <section className="bg-white rounded-2xl shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900">Choose your Business Portfolio</h2>
           <p className="text-sm text-gray-500 mt-1 mb-5">
-            Pick the portfolio that owns the Pages you want to connect to{" "}
-            <span className="font-medium text-gray-700">{org?.name}</span>.
+            {org ? (
+              <>
+                Pick the portfolio that owns the Pages you want to connect to{" "}
+                <span className="font-medium text-gray-700">{org.name}</span>.
+              </>
+            ) : (
+              "Pick the portfolio that owns the Pages you want to connect."
+            )}
           </p>
 
           {loading ? (
@@ -423,11 +443,17 @@ function OnboardingWizard() {
         <section className="bg-white rounded-2xl shadow p-6">
           <h2 className="text-lg font-semibold text-gray-900">
             {connectedIds.length
-              ? `${connectedIds.length} Page${
-                  connectedIds.length === 1 ? "" : "s"
-                } connected to ${org?.name} 🎉`
+              ? `${connectedIds.length} Page${connectedIds.length === 1 ? "" : "s"} connected${
+                  org ? ` to ${org.name}` : ""
+                } 🎉`
               : "Nothing was connected"}
           </h2>
+          {!org && connectedIds.length > 0 && (
+            <p className="text-sm text-gray-500 mt-2">
+              We will link {connectedIds.length === 1 ? "it" : "them"} to your organization for
+              you — no further action needed.
+            </p>
+          )}
 
           <ul className="mt-5 space-y-2">
             {results.map((result) => (

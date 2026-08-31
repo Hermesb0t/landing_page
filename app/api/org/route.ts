@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getPublicOrg } from "@/lib/org";
+import { findOrg } from "@/lib/org";
 
-/** Confirms the workspace slug in the onboarding link belongs to a real organization. */
+/** Confirms the workspace slug (or org name) the client entered is a real organization. */
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug") ?? "";
 
@@ -10,10 +10,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const org = await getPublicOrg(slug);
+    const org = await findOrg(slug);
     if (!org) {
       return NextResponse.json(
-        { error: "No organization found with that workspace name." },
+        {
+          error:
+            "We could not match that to an organization. Try the workspace name from your dashboard URL — or skip this step and we will link the Page for you.",
+        },
         { status: 404 }
       );
     }

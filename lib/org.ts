@@ -42,6 +42,49 @@ export async function getPublicOrg(slug: string): Promise<OrgSummary | null> {
 }
 
 /**
+ * Finds an org by workspace slug OR by its display name — clients know their
+ * clinic's name, not the slug buried in a dashboard URL.
+ *
+ * Returns the canonical slug only, never the id, and only ever on an exact
+ * match: this runs for unauthenticated visitors, so it must not become a way to
+ * browse the customer list.
+ */
+export async function findOrg(query: string): Promise<OrgSummary | null> {
+  const normalized = normalizeSlug(query);
+  if (!normalized) return null;
+
+  const bySlug = await getPublicOrg(normalized);
+  if (bySlug) return bySlug;
+
+  const res = await fetch(
+    `${backendUrl()}/orgs?` +
+      new URLSearchParams({ search: normalized, page: "1", limit: "100" }),
+    {
+      headers: { Authorization: `Bearer ${process.env.ADMIN_TOKEN}` },
+      cache: "no-store",
+    }
+  );
+  if (!res.ok) {
+    console.error("Org lookup failed:", res.status, await res.text());
+    return null;
+  }
+
+  const body = await res.json();
+  const orgs: Array<{ slug?: string; name?: string; imageUrl?: string; isActive?: boolean }> =
+    Array.isArray(body) ? body : body?.data ?? [];
+
+  // `search` is a loose regex, so require the whole name to match, and bail out
+  // when it is ambiguous rather than guessing at the client's org.
+  const matches = orgs.filter(
+    (o) => o.isActive !== false && (o.name ?? "").trim().toLowerCase() === normalized
+  );
+  if (matches.length !== 1 || !matches[0].slug) return null;
+
+  const org = matches[0];
+  return { slug: org.slug!, name: org.name ?? org.slug!, imageUrl: org.imageUrl };
+}
+
+/**
  * The org's ObjectId, for writing on the Page record. Uses the admin token, so
  * this must only ever run server-side.
  */
