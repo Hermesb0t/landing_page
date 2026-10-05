@@ -110,6 +110,9 @@ function OnboardingWizard() {
       try {
         const res = await fetch("/api/pages");
         const data = await res.json();
+        if (!res.ok && !Array.isArray(data.pages)) {
+          throw new Error(data.error ?? "Could not load your Pages.");
+        }
         setPages(data.pages ?? []);
         setBusinesses(data.businesses ?? []);
         setWarnings(data.warnings ?? []);
@@ -238,12 +241,14 @@ function OnboardingWizard() {
               <li key={i}>{w}</li>
             ))}
           </ul>
-          <button
-            onClick={regrant}
-            className="mt-3 px-4 py-2 bg-amber-600 text-white text-sm rounded-lg hover:bg-amber-700"
-          >
-            Grant business access
-          </button>
+          {needsReauth && (
+            <button
+              onClick={regrant}
+              className="mt-3 px-4 py-2 bg-amber-600 text-white text-sm rounded-lg hover:bg-amber-700"
+            >
+              Reconnect Facebook
+            </button>
+          )}
         </div>
       )}
 

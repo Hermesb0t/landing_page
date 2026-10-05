@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
-import { Session } from "next-auth";
+import { GRAPH_VERSION } from "@/lib/facebook";
 
 // Extend the Session type to include accessToken
 declare module "next-auth" {
@@ -15,10 +15,15 @@ const authHandler = NextAuth({
       clientId: process.env.FACEBOOK_CLIENT_ID!,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
       authorization: {
+        url: `https://www.facebook.com/${GRAPH_VERSION}/dialog/oauth`,
         params: {
-          // business_management is what surfaces Pages owned by a Business Manager
-          // (/me/businesses → owned_pages / client_pages) on top of /me/accounts.
-          scope: "email,public_profile,business_management,pages_show_list,pages_read_engagement,pages_manage_metadata,pages_messaging",
+          // Business Login configurations select permissions/assets in Meta.
+          ...(process.env.FACEBOOK_LOGIN_CONFIG_ID
+            ? { config_id: process.env.FACEBOOK_LOGIN_CONFIG_ID }
+            : {
+                scope: "email,public_profile,business_management,pages_show_list,pages_read_engagement,pages_manage_metadata,pages_messaging",
+              }),
+          auth_type: "rerequest",
         },
       },
     }),

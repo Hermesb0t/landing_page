@@ -1,5 +1,32 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Facebook business Page onboarding
+
+The Facebook app must be allowed to request `business_management`, `pages_show_list`,
+`pages_read_engagement`, `pages_manage_metadata`, and `pages_messaging`. For customer
+accounts outside the app's roles, check that the app is live and has the required
+Advanced Access/App Review approvals in Meta's dashboard. Adding a scope in code
+cannot grant permissions that Meta has not approved for the app.
+
+If the app uses Facebook Login for Business, set `FACEBOOK_LOGIN_CONFIG_ID` on the
+server to its configuration ID. Configure it for a **user access token** (this app
+uses `/me`, `/me/permissions`, and `/me/businesses`), with the permissions above
+and Page assets. When unset, the app uses the standard Facebook Login scope list.
+`FACEBOOK_GRAPH_VERSION` controls the Graph API and login dialog version.
+
+After changing permissions or the login configuration, existing customers must
+use **Reconnect Facebook** and select their business and Pages in Facebook's
+consent screen. The app checks granted permissions before listing businesses;
+an existing session does not automatically gain newly requested permissions.
+If permission is granted but Facebook still rejects a business lookup, check the
+person's Page assignment and the app's business access instead of repeatedly
+asking them to grant the same permission.
+
+References: [Meta permission checks and re-requesting consent](https://developers.facebook.com/docs/facebook-login/permissions/requesting-and-revoking/),
+[Facebook Login for Business](https://developers.facebook.com/docs/facebook-login/facebook-login-for-business/).
+
+Run the mocked Graph API regression tests with `npm test`.
+
 ## Getting Started
 
 First, run the development server:

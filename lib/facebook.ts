@@ -56,9 +56,14 @@ export interface PageDiscoveryResult {
   needsReauth: boolean;
 }
 
-/** Missing/expired permission, as opposed to a real failure. */
+/** OAuthException also covers invalid fields and server errors, not just consent. */
 function isPermissionError(error?: GraphError) {
-  return error?.code === 10 || error?.code === 200 || error?.type === "OAuthException";
+  return error?.code === 10 || error?.code === 200 ||
+    (error?.code === 100 && /permission/i.test(error.message));
+}
+
+function needsLogin(error?: GraphError) {
+  return error?.code === 190 || isPermissionError(error);
 }
 
 /** Follows `paging.next` so businesses with many Pages are not truncated at 25. */
@@ -73,7 +78,7 @@ async function graphList<T>(
     new URLSearchParams({ ...params, limit: "100", access_token: accessToken });
 
   while (url) {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
     const json = await res.json();
     if (json.error) return { data: out, error: json.error as GraphError };
     out.push(...((json.data ?? []) as T[]));
@@ -104,13 +109,40 @@ function toConnectable(
 }
 
 /**
- * `/me/accounts` only returns Pages the person holds a direct role on. Pages owned by a
- * Business Manager show up under the business instead, so we walk `/me/businesses` and
- * collect both owned and client Pages, then merge everything by Page id.
+ * Start with the Pages available to the user, then supplement them with owned and
+ * client Pages from business portfolios when business access has been granted.
  */
 export async function discoverPages(userAccessToken: string): Promise<PageDiscoveryResult> {
   const warnings: string[] = [];
   let needsReauth = false;
+
+  // Requesting a scope during login does not mean Facebook granted it. Older
+  // sessions, declined consent, and app access levels can all leave it absent.
+  const permissions = await graphList<{ permission: string; status: string }>(
+    "me/permissions", userAccessToken
+  );
+  const granted = new Set(
+    permissions.data.filter((p) => p.status === "granted").map((p) => p.permission)
+  );
+  const businessAccessMissing = !permissions.error && !granted.has("business_management");
+  if (businessAccessMissing) {
+    needsReauth = true;
+    warnings.push(
+      "Facebook has not granted access to your business portfolios. Reconnect and allow access to the business and Pages you want to connect. If Facebook does not offer this access, contact Hermesbot support to check the app's business access approval."
+    );
+  }
+  if (!permissions.error && [
+    "pages_show_list", "pages_read_engagement", "pages_manage_metadata", "pages_messaging",
+  ].some((permission) => !granted.has(permission))) {
+    needsReauth = true;
+    warnings.push("Facebook has not granted all the Page permissions needed to connect Messenger. Reconnect and allow access to your selected Pages.");
+  }
+  if (permissions.error?.code === 190) {
+    return {
+      businesses: [], pages: [], needsReauth: true,
+      warnings: ["Your Facebook login has expired or was revoked. Reconnect to load your Pages."],
+    };
+  }
 
   const byId = new Map<string, ConnectablePage>();
   const add = (page: ConnectablePage) => {
@@ -136,21 +168,23 @@ export async function discoverPages(userAccessToken: string): Promise<PageDiscov
     fields: PAGE_FIELDS,
   });
   if (accounts.error) {
-    if (isPermissionError(accounts.error)) needsReauth = true;
+    if (needsLogin(accounts.error)) needsReauth = true;
     warnings.push(`Could not read your Pages: ${accounts.error.message}`);
   }
   accounts.data.forEach((p) => add(toConnectable(p, "personal")));
 
-  const businesses = await graphList<{ id: string; name: string }>(
+  const businesses = businessAccessMissing ? { data: [] } : await graphList<{ id: string; name: string }>(
     "me/businesses",
     userAccessToken,
     { fields: "id,name" }
   );
   if (businesses.error) {
-    if (isPermissionError(businesses.error)) needsReauth = true;
-    warnings.push(
-      `Could not read your business portfolios (grant "business_management" to see Pages owned by a business): ${businesses.error.message}`
-    );
+    if (businesses.error.code === 190 || (permissions.error && isPermissionError(businesses.error))) {
+      needsReauth = true;
+    }
+    warnings.push(isPermissionError(businesses.error)
+      ? "Facebook denied access to your business portfolios. Ask a business admin to check your Page assignment and the app's access to this business. If access is already assigned, contact Hermesbot support to check the app's business access approval."
+      : `Could not read your business portfolios: ${businesses.error.message}`);
   }
 
   for (const business of businesses.data) {
@@ -159,18 +193,34 @@ export async function discoverPages(userAccessToken: string): Promise<PageDiscov
         fields: PAGE_FIELDS,
       });
       if (result.error) {
-        if (isPermissionError(result.error)) needsReauth = true;
+        if (needsLogin(result.error)) needsReauth = true;
         warnings.push(`${business.name} (${edge}): ${result.error.message}`);
-        continue;
       }
       result.data.forEach((p) => add(toConnectable(p, "business", business)));
     }
+  }
+
+  // Business listings can omit a Page token even when a direct Page lookup can
+  // issue one. Resolve it before the UI decides whether the Page is selectable.
+  for (const page of byId.values()) {
+    if (page.hasToken) continue;
+    const res = await fetch(`${GRAPH_URL}/${encodeURIComponent(page.id)}?` +
+      new URLSearchParams({ fields: "access_token", access_token: userAccessToken }),
+      { cache: "no-store" });
+    const detail = await res.json();
+    page.hasToken = Boolean(detail.access_token);
+    if (needsLogin(detail.error)) needsReauth = true;
   }
 
   const pages = [...byId.values()].sort(
     (a, b) =>
       (a.businessName ?? "").localeCompare(b.businessName ?? "") || a.name.localeCompare(b.name)
   );
+
+  if (!pages.length && !warnings.length) {
+    needsReauth = true;
+    warnings.push("No Pages were shared with Hermesbot. Reconnect and select the business and Pages you want to connect. If a Page is not offered, ask a business admin to assign you access to it.");
+  }
 
   const countIn = (portfolioId: string) =>
     pages.filter((p) => p.portfolioId === portfolioId).length;
